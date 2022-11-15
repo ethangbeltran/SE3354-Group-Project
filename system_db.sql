@@ -3,8 +3,8 @@ CREATE TABLE Customer (
 	Username VARCHAR(30) NOT NULL,
     -- The website shall hash the password and send it to the database to verify if the user inputted the correct password
 	PasswordHash VARCHAR(30) NOT NULL,
-	IsAdmin BOOLEAN NOT NULL,
-	RewardPoints INT NOT NULL,
+	IsAdmin BOOLEAN NOT NULL DEFAULT false,
+	RewardPoints INT NOT NULL DEFAULT 0,
 	Primary Key(Username)
 );
 
@@ -32,7 +32,7 @@ CREATE TABLE SupportTicket (
     Title VARCHAR(255) NOT NULL,
     Info VARCHAR(10000) NOT NULL,
     Made DATE NOT NULL,
-    Resolved BOOLEAN NOT NULL,
+    Resolved BOOLEAN NOT NULL DEFAULT false,
     Primary Key(SupportID),
     Foreign Key(Username) REFERENCES Customer(Username)
 );
