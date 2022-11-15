@@ -19,6 +19,7 @@ const con = mysql.createConnection({
 	host: "localhost",
 	user: "username",
 	password: "passwd",
+	database: "fastsnacks"
 });
 
 con.connect(function(err) {
@@ -44,6 +45,18 @@ app.post('/login', async function(req,res) {
 	let password = req.body.password;
 	let passwordHash = await bcrypt.hash(password, 15); // 15 salt rounds
 	console.log(`Post attempted, "${username}" "${password}" "${passwordHash}"`);
+	var sql = "SELECT username, passwordhash FROM Customer"
+	con.query(sql, (err, result) => {
+		if (err) throw err;
+		console.log(result)
+		bcrypt.compare(password, passwordHash, (err, matches) => {
+			if (err) throw err;
+			if (matches) {
+				console.log("match successful")
+				// TODO: Create session
+			}
+		})
+	})
 	res.redirect("/login.html")
 })
 
