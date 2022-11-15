@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const nunjucks = require("nunjucks");
 const connection = require("../util/database");
 const router = express.Router();
 module.exports = router;
@@ -12,6 +13,35 @@ router.use(express.urlencoded({ extended: true }));
 // Every browser instances creates a session, whether logged in or not.
 // Because of this, logging in simply involves attaching a username to a session (because usernames must be unique).
 // To implement logging out, use session.destroy() which will force the user's browser to create a new session afterwards.
+
+router.get("/login", (req, res) => {
+  // Redirect the user to the main page if they've already logged in.
+  if (req.session.username) {
+    return res.redirect("/");
+  }
+
+  res.send(
+    nunjucks.render("templates/login.njk", {
+      username: req.session.username,
+      error: req.query.error,
+      isRegistrationSuccessful: !!req.query.registration_success,
+    })
+  );
+});
+
+router.get("/register", (req, res) => {
+  // Redirect the user to the main page if they've already logged in.
+  if (req.session.username) {
+    return res.redirect("/");
+  }
+
+  res.send(
+    nunjucks.render("templates/register.njk", {
+      username: req.session.username,
+      error: req.query.error,
+    })
+  );
+});
 
 // Error #1: Empty username
 // Error #2: Empty password
@@ -104,4 +134,9 @@ router.post("/register", async (req, res) => {
     0,
   ]);
   res.redirect("/login?registration_success=1");
+});
+
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
 });

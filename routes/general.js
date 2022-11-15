@@ -3,13 +3,13 @@ const nunjucks = require("nunjucks");
 const router = express.Router();
 module.exports = router;
 
-router.get(["/"], (req, res) => {
+router.get("/", (req, res) => {
   res.send(
     nunjucks.render("templates/index.njk", { username: req.session.username })
   );
 });
 
-router.get(["/favorites"], (req, res) => {
+router.get("/favorites", (req, res) => {
   res.send(
     nunjucks.render("templates/favorites.njk", {
       username: req.session.username,
@@ -34,7 +34,7 @@ router.get(["/favorites"], (req, res) => {
   );
 });
 
-router.get(["/list-items"], (req, res) => {
+router.get("/list-items", (req, res) => {
   res.send(
     nunjucks.render("templates/list-items.njk", {
       username: req.session.username,
@@ -60,18 +60,7 @@ router.get(["/list-items"], (req, res) => {
   );
 });
 
-router.get(["/login"], (req, res) => {
-  // Redirect the user to the main page if they've already logged in.
-  if (req.session.username) {
-    return res.redirect("/");
-  }
-
-  res.send(
-    nunjucks.render("templates/login.njk", { username: req.session.username })
-  );
-});
-
-router.get(["/payment-methods"], (req, res) => {
+router.get("/payment-methods", (req, res) => {
   res.send(
     nunjucks.render("templates/payment-methods.njk", {
       username: req.session.username,
@@ -79,27 +68,14 @@ router.get(["/payment-methods"], (req, res) => {
   );
 });
 
-router.get(["/register"], (req, res) => {
-  // Redirect the user to the main page if they've already logged in.
-  if (req.session.username) {
-    return res.redirect("/");
-  }
-
-  res.send(
-    nunjucks.render("templates/register.njk", {
-      username: req.session.username,
-    })
-  );
-});
-
-router.get(["/rewards"], (req, res) => {
+router.get("/rewards", (req, res) => {
   // TODO: Create a paginate function to split an array into 4 sections each
   res.send(
     nunjucks.render("templates/rewards.njk", { username: req.session.username })
   );
 });
 
-router.get(["/search"], (req, res) => {
+router.get("/search", (req, res) => {
   res.send(
     nunjucks.render("templates/search.njk", {
       username: req.session.username,
@@ -138,7 +114,7 @@ router.get(["/search"], (req, res) => {
   );
 });
 
-router.get(["/support-submit"], (req, res) => {
+router.get("/support-submit", (req, res) => {
   res.send(
     nunjucks.render("templates/support-submit.njk", {
       username: req.session.username,
@@ -146,7 +122,7 @@ router.get(["/support-submit"], (req, res) => {
   );
 });
 
-router.get(["/transaction-history"], (req, res) => {
+router.get("/transaction-history", (req, res) => {
   res.send(
     nunjucks.render("templates/transaction-history.njk", {
       username: req.session.username,
