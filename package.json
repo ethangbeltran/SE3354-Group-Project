@@ -4,7 +4,7 @@
   "description": "*insert description here*",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
+    "start": "nodemon .",
     "format": "prettier --write ."
   },
   "repository": {
@@ -20,6 +20,7 @@
     "nunjucks": "^3.2.3"
   },
   "devDependencies": {
+    "nodemon": "^2.0.20",
     "prettier": "^2.7.1"
   }
 }

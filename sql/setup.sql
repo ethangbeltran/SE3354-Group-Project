@@ -1,8 +1,16 @@
-CREATE TABLE Customer (
+-- Warning: Running this script will re-create the database from scratch, meaning all existing data will be wiped!
+
+DROP DATABASE IF EXISTS fastsnacks;
+CREATE DATABASE fastsnacks;
+-- Enter the database after creating it
+USE fastsnacks;
+
+CREATE TABLE Customers (
     -- Username is the primary key since all Users must have unique usernames
 	Username VARCHAR(30) NOT NULL,
     -- The website shall hash the password and send it to the database to verify if the user inputted the correct password
-	PasswordHash VARCHAR(30) NOT NULL,
+	-- bcrypt hashes are guaranteed to be 60 exactly characters long: https://www.npmjs.com/package/bcrypt#hash-info
+	PasswordHash CHAR(60) NOT NULL,
 	IsAdmin BOOLEAN NOT NULL,
 	RewardPoints INT NOT NULL,
 	Primary Key(Username)
@@ -12,7 +20,7 @@ CREATE TABLE Customer (
     Table to hold credit card info. The expiration date is seperated into month and year to make it easier to determine if a card is expired
 */
 
-CREATE TABLE PaymentMethod (
+CREATE TABLE PaymentMethods (
     Username VARCHAR(30) NOT NULL,
     CardNumber VARCHAR(16) NOT NULL,
 	SecurityCode CHAR(4) NOT NULL,
@@ -20,13 +28,13 @@ CREATE TABLE PaymentMethod (
     ExpirationYear INT NOT NULL,
 	AccountBalance DECIMAL(5,2) NOT NULL,
     Primary Key(Username, CardNumber),
-    Foreign Key(Username) REFERENCES Customer(Username)
+    Foreign Key(Username) REFERENCES Customers(Username)
 );
 
 /*
-    Table to hold support tickets, and 
+    Table to hold support tickets, and
 */
-CREATE TABLE SupportTicket (
+CREATE TABLE SupportTickets (
     SupportID INT NOT NULL,
     Username VARCHAR(30) NOT NULL,
     Title VARCHAR(255) NOT NULL,
@@ -34,13 +42,13 @@ CREATE TABLE SupportTicket (
     Made DATE NOT NULL,
     Resolved BOOLEAN NOT NULL,
     Primary Key(SupportID),
-    Foreign Key(Username) REFERENCES Customer(Username)
+    Foreign Key(Username) REFERENCES Customers(Username)
 );
 /*
     Items can have the same name but will be differieniated by their ID
     Calories, Carb, Fat, Protein, and Sugar all refer to the nutritional data of the item
 */
-CREATE TABLE Item (
+CREATE TABLE Items (
 	ItemID INT NOT NULL,
 	ItemName VARCHAR(50) NOT NULL,
 	Price DECIMAL(3, 2) NOT NULL,
@@ -55,7 +63,7 @@ CREATE TABLE Item (
 /*
     A simple table storing supported vending machines and their locations
 */
-CREATE TABLE VendingMachine (
+CREATE TABLE VendingMachines (
 	MachineID INT NOT NULL,
 	VendingLocation VARCHAR(255) NOT NULL,
 	Primary Key(MachineID)
@@ -69,8 +77,8 @@ CREATE TABLE Stock (
 	ItemID INT NOT NULL,
 	Quantity INT NOT NULL,
 	Primary Key(MachineID, ItemID),
-	Foreign Key(MachineID) REFERENCES VendingMachine(MachineID),
-	Foreign Key(ItemID) REFERENCES Item(ItemID)
+	Foreign Key(MachineID) REFERENCES VendingMachines(MachineID),
+	Foreign Key(ItemID) REFERENCES Items(ItemID)
 );
 
 /*
@@ -84,11 +92,11 @@ CREATE TABLE Orders (
 	Quantity INT NOT NULL,
 	OrderDate DATE NOT NULL,
 	Primary Key(OrderID, Username, MachineID, ItemID, Quantity, OrderDate),
-	Foreign Key(Username) REFERENCES Customer(Username),
-	Foreign Key(MachineID) REFERENCES VendingMachine(MachineID),
-	Foreign Key(ItemID) REFERENCES Item(ItemID)
+	Foreign Key(Username) REFERENCES Customers(Username),
+	Foreign Key(MachineID) REFERENCES VendingMachines(MachineID),
+	Foreign Key(ItemID) REFERENCES Items(ItemID)
 );
-	
+
 /*
     A table to store the favorite item(s) of a user
 */
@@ -96,6 +104,6 @@ CREATE TABLE Favorites (
 	Username VARCHAR(30) NOT NULL,
 	ItemID INT NOT NULL,
 	Primary Key(Username, ItemID),
-	Foreign Key(Username) REFERENCES Customer(Username),
-	Foreign Key(ItemID) REFERENCES Item(ItemID)
+	Foreign Key(Username) REFERENCES Customers(Username),
+	Foreign Key(ItemID) REFERENCES Items(ItemID)
 );

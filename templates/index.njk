@@ -2,5 +2,10 @@
 {% extends "templates/base.njk" %}
 
 {% block content %}
-<p>to-do home page</p>
+<p>to-do home page {{username}}</p>
+{% if username %}
+<p>Logged in as: {{username}}</p>
+{% else %}
+<p>Not logged in</p>
+{% endif %}
 {% endblock %}

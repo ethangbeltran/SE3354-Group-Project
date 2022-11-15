@@ -4,9 +4,11 @@ const fs = require("fs/promises");
 const router = express.Router();
 module.exports = router;
 
+// [TODO] Modularize nunjucks render by adding callback, /login and /register redirect to home page.
+
 function mirrorTemplate(slug) {
   router.get(`/${slug}`, (req, res) => {
-    res.send(nunjucks.render(`templates/${slug}.njk`));
+    res.send(nunjucks.render(`templates/${slug}.njk`, {username: req.session.username}));
   });
 }
 
@@ -26,5 +28,5 @@ fs.readdir("templates").then((files) => {
 
 // An extra route is needed for the base URL.
 router.get("/", async (req, res) => {
-  res.send(nunjucks.render("templates/index.njk"));
+  res.send(nunjucks.render("templates/index.njk", {username: req.session.username}));
 });

@@ -11,14 +11,23 @@ _insert description here_
 - `.env`: Contains project variables
   - `PORT` (default `3000`)
   - `SESSION_SECRET`: Used to secure cookies, should be kept secret per-environment
-  - `MYSQL_HOST`
+  - `MYSQL_HOST` (default `localhost`)
   - `MYSQL_USER`
   - `MYSQL_PASS`
 
 # Commands
 
+- `npm install`: Installs or reinstalls necessary dependencies
 - `npm start`: Starts the development server
 - `npm run format`: Runs the code formatter
+
+# Database Setup
+
+The program does not automatically setup a MySQL database or the corresponding tables, the SQL scripts provided in `sql` must be run manually.
+
+1. `CREATE DATABASE IF NOT EXISTS fastsnacks`
+2. `mysql -u <...> -p < sql/setup.sql`
+3. For each migration, determine the version of the database then execute `mysql -u <...> -p -D fastsnacks < sql/migration-1.sql`
 
 # Frontend/Backend Communication
 
