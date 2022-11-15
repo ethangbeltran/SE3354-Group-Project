@@ -1,5 +1,6 @@
 const express = require('express')
-const mysql = require('mysql2');
+const mysql = require('mysql2')
+const session = require('express-session')
 const app = express()
 const port = 3000
 
@@ -18,6 +19,33 @@ const con = mysql.createConnection({
 	user: "username",
 	password: "passwd",
 });
+
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}))
+
+app.get('/login', (req, res) => {
+	res.redirect("login.html")
+})
+
+app.post('/login', function(req,res) {
+	//res.status(200).send('You tried')
+	console.log(req.body)
+	//console.log(res.body)
+	//var username = req.body.username
+	//var password = req.body.password
+	//console.log(username)
+	//console.log(password)
+	console.log("Post attempted")
+	//res.redirect("/login.html")
+})
+
+app.post('/register', (req, res, next) => {
+	res.status(200).send('You tried')
+	console.log(req.body)
+})
 
 con.connect(function(err) {
 	if (err) throw err;
