@@ -1,6 +1,7 @@
 const express = require('express')
 const mysql = require('mysql2')
 const session = require('express-session')
+const bcrypt = require('bcrypt');
 const app = express()
 const port = 3000
 
@@ -20,6 +21,11 @@ const con = mysql.createConnection({
 	password: "passwd",
 });
 
+con.connect(function(err) {
+	if (err) throw err;
+	console.log("Connected!");
+});
+
 app.use(session({
 	secret: 'secret',
 	resave: true,
@@ -30,27 +36,21 @@ app.get('/login', (req, res) => {
 	res.redirect("login.html")
 })
 
-app.post('/login', function(req,res) {
-	//res.status(200).send('You tried')
-	console.log(req.body)
-	//console.log(res.body)
-	//var username = req.body.username
-	//var password = req.body.password
-	//console.log(username)
-	//console.log(password)
-	console.log("Post attempted")
-	//res.redirect("/login.html")
+// This middleware is needed to process input from HTML forms
+app.use(express.urlencoded())
+
+app.post('/login', async function(req,res) {
+	let username = req.body.username;
+	let password = req.body.password;
+	let passwordHash = await bcrypt.hash(password, 15); // 15 salt rounds
+	console.log(`Post attempted, "${username}" "${password}" "${passwordHash}"`);
+	res.redirect("/login.html")
 })
 
 app.post('/register', (req, res, next) => {
 	res.status(200).send('You tried')
 	console.log(req.body)
 })
-
-con.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-});
 
 app.use(express.static('public'))
 
