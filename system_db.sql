@@ -15,7 +15,7 @@ CREATE TABLE Customer (
 CREATE TABLE PaymentMethod (
     Username VARCHAR(30) NOT NULL,
     CardNumber VARCHAR(16) NOT NULL,
-	Se
+	SecurityCode CHAR(4) NOT NULL,
     ExpirationMonth INT NOT NULL,
     ExpirationYear INT NOT NULL,
 	AccountBalance DECIMAL(5,2) NOT NULL,
