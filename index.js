@@ -1,59 +1,30 @@
 const express = require('express')
-const mysql = require('mysql2')
 const session = require('express-session')
-const bcrypt = require('bcrypt');
+const routerGeneral = require("./routes/general");
+const routerAuth = require("./routes/auth");
+const routerAPI = require("./routes/api");
+
+// Run dotenv module
+require("dotenv").config();
+// Run the code in database.js
+require("./util/database");
+
 const app = express()
-const port = 3000
+const port = parseInt(process.env.PORT) || 3000
 
-app.get('/api/stuff', (req, res) => {
-	console.log("User used endpoint /api/stuff")
-
-	res.send(JSON.stringify({
-		type: 420,
-		message: "This is some sample text"
-	}))
-})
-
-// Maybe move configuration to separate file?
-const con = mysql.createConnection({
-	host: "localhost",
-	user: "username",
-	password: "passwd",
-});
-
-con.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-});
+// Use routes provided by routers.
+app.use(routerGeneral);
+app.use(routerAuth);
+app.use(routerAPI);
 
 app.use(session({
-	secret: 'secret',
+	secret: process.env.SESSION_SECRET || 'secret',
 	resave: true,
 	saveUninitialized: true
 }))
 
-app.get('/login', (req, res) => {
-	res.redirect("login.html")
-})
-
-// This middleware is needed to process input from HTML forms
-app.use(express.urlencoded())
-
-app.post('/login', async function(req,res) {
-	let username = req.body.username;
-	let password = req.body.password;
-	let passwordHash = await bcrypt.hash(password, 15); // 15 salt rounds
-	console.log(`Post attempted, "${username}" "${password}" "${passwordHash}"`);
-	res.redirect("/login.html")
-})
-
-app.post('/register', (req, res, next) => {
-	res.status(200).send('You tried')
-	console.log(req.body)
-})
-
 app.use(express.static('public'))
 
 app.listen(port, () => {
-	console.log(`Example app listening on port ${port}`)
+	console.log(`FastSnacks server listening on port ${port}.`)
 })

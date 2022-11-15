@@ -1,0 +1,78 @@
+{# List of Snacks & Vending Machines #}
+{% set title = "List of Items" %}
+{% extends "templates/base.njk" %}
+
+{% block content %}
+<div class="row border border-dark rounded">
+	<div class="col border-end border-dark">
+		<h2 class="text-center">Snacks</h2>
+		<div class="container">
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col-1 border-end border-dark">
+					<img src="fastsnacks.png" class="w-100 p-2">
+				</div>
+				<div class="col py-2">
+					<h3>Example Snack</h3>
+					<p>$2.99</p>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col-1 border-end border-dark">
+					<img src="fastsnacks.png" class="w-100 p-2">
+				</div>
+				<div class="col py-2">
+					<h3>Example Snack</h3>
+					<p>$2.99</p>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col-1 border-end border-dark">
+					<img src="fastsnacks.png" class="w-100 p-2">
+				</div>
+				<div class="col py-2">
+					<h3>Example Snack</h3>
+					<p>$2.99</p>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col border-bottom">
+		<h2 class="text-center">Vending Machines</h2>
+		<div class="container">
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col py-2">
+					<h3>Richardson #7</h3>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col py-2">
+					<h3>Plano #2</h3>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col py-2">
+					<h3>Richardson #9</h3>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

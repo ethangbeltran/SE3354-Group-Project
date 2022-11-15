@@ -1,0 +1,62 @@
+{# Search (with category) #}
+{% set title = "Search Results" %}
+{% extends "templates/base.njk" %}
+
+{% block content %}
+<div class="row border border-dark rounded">
+	<div class="col border-end border-dark">
+		<h2 class="text-center">Snacks</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Snack</th>
+					<th scope="col">Price</th>
+					<th scope="col">Quantity (in stock)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Example Snack</td>
+					<td>$1.99</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<td>Example Snack</td>
+					<td>$2.99</td>
+					<td>6</td>
+				</tr>
+				<tr>
+					<td>Example Snack</td>
+					<td>$3.99</td>
+					<td>7</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="col border-bottom">
+		<h2 class="text-center">Vending Machines</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Location</th>
+					<th scope="col">Has Favorite in Stock?</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Richardson #7</td>
+					<td>Yes</td>
+				</tr>
+				<tr>
+					<td>Plano #2</td>
+					<td>No</td>
+				</tr>
+				<tr>
+					<td>Richardson #9</td>
+					<td>No</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}
