@@ -15,21 +15,13 @@
 				</tr>
 			</thead>
 			<tbody>
+				{% for item in snacks %}
 				<tr>
-					<td>Example Snack</td>
-					<td>$1.99</td>
-					<td>5</td>
+					<td>{{item.name}}</td>
+					<td>{{item.price}}</td>
+					<td>{{item.quantity}}</td>
 				</tr>
-				<tr>
-					<td>Example Snack</td>
-					<td>$2.99</td>
-					<td>6</td>
-				</tr>
-				<tr>
-					<td>Example Snack</td>
-					<td>$3.99</td>
-					<td>7</td>
-				</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 	</div>
@@ -43,18 +35,12 @@
 				</tr>
 			</thead>
 			<tbody>
+				{% for item in vending %}
 				<tr>
-					<td>Richardson #7</td>
-					<td>Yes</td>
+					<td>{{item.name}}</td>
+					<td>{% if item.favoriteInStock %}Yes{% else %}No{% endif %}</td>
 				</tr>
-				<tr>
-					<td>Plano #2</td>
-					<td>No</td>
-				</tr>
-				<tr>
-					<td>Richardson #9</td>
-					<td>No</td>
-				</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 	</div>

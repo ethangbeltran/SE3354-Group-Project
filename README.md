@@ -25,9 +25,8 @@ _insert description here_
 
 The program does not automatically setup a MySQL database or the corresponding tables, the SQL scripts provided in `sql` must be run manually.
 
-1. `CREATE DATABASE IF NOT EXISTS fastsnacks`
-2. `mysql -u <...> -p < sql/setup.sql`
-3. For each migration, determine the version of the database then execute `mysql -u <...> -p -D fastsnacks < sql/migration-1.sql`
+- Setup: `mysql -u <...> -p < sql/setup.sql` (if this script is run again, it'll wipe the existing database and create it again)
+- For each migration, determine the version of the database then execute `mysql -u <...> -p -D fastsnacks < sql/migration-1.sql`
 
 # Frontend/Backend Communication
 

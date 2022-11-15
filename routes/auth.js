@@ -19,7 +19,7 @@ router.use(express.urlencoded({ extended: true }));
 // Error #4: Invalid password
 router.post("/login", async (req, res) => {
   // Redirect the user to the main page if they've already logged in.
-  if(req.session.username) {
+  if (req.session.username) {
     return res.redirect("/");
   }
 
@@ -39,16 +39,16 @@ router.post("/login", async (req, res) => {
   );
 
   // Check if the username already exists in the database.
-  if(results.length === 0) {
+  if (results.length === 0) {
     return res.redirect("/login?error=3");
   }
 
   // There should only be one user per username, meaning this operation should be safe.
-  const {Username, PasswordHash} = results[0];
+  const { Username, PasswordHash } = results[0];
 
   const isValidPassword = await bcrypt.compare(password, PasswordHash);
 
-  if(!isValidPassword) {
+  if (!isValidPassword) {
     return res.redirect("/login?error=4");
   }
 
@@ -66,7 +66,7 @@ router.post("/login", async (req, res) => {
 // Error #4: Username already taken
 router.post("/register", async (req, res) => {
   // Redirect the user to the main page if they've already logged in.
-  if(req.session.username) {
+  if (req.session.username) {
     return res.redirect("/");
   }
 
