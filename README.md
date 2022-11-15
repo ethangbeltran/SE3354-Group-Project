@@ -18,6 +18,7 @@ _insert description here_
 # Commands
 
 - `npm start`: Starts the development server
+- `npm run format`: Runs the code formatter
 
 # Frontend/Backend Communication
 
