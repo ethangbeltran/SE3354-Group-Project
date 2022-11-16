@@ -60,9 +60,28 @@ app.post('/login', async function(req,res) {
 	res.redirect("/login.html")
 })
 
-app.post('/register', (req, res, next) => {
-	res.status(200).send('You tried')
-	console.log(req.body)
+app.post('/register', async (req, res) => {
+	let username = req.body.email
+	let password = req.body.psw
+	let passwordHash = await bcrypt.hash(password, 15)
+	console.log(`Register attempted, "${username}" "${password}" "${passwordHash}"`)
+	var sql = "SELECT username FROM Customer WHERE username = ${username}"
+	con.query(sql, (err, result) => {
+		// New user, add to database
+		if (err) {
+			sql = `INSERT INTO Customer (username, passwordHash) VALUES ("${username}", "${passwordHash}")`
+			con.query(sql, (err, result) => {
+				if (err) throw err
+				console.log("New user registered")
+				res.redirect("/")
+			})
+		}
+		else {
+			console.log(result)
+			console.log("User already registered.")
+			res.redirect("/register.html")
+		}
+	})
 })
 
 app.use(express.static('public'))
