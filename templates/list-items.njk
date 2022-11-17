@@ -1,0 +1,42 @@
+{# List of Snacks & Vending Machines #}
+{% set title = "List of Items" %}
+{% extends "templates/base.njk" %}
+
+{% block content %}
+<div class="row border border-dark rounded">
+	<div class="col border-end border-dark">
+		<h2 class="text-center">Snacks</h2>
+		<div class="container">
+			{% for item in snacks %}
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col-1 border-end border-dark">
+					<img src="{{item.icon}}" class="w-100 p-2">
+				</div>
+				<div class="col py-2">
+					<h3>{{item.name}}</h3>
+					<p>{{item.price}}</p>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="col border-bottom">
+		<h2 class="text-center">Vending Machines</h2>
+		<div class="container">
+			{% for item in vending %}
+			<div class="row d-flex border border-dark rounded align-items-center mb-2">
+				<div class="col py-2">
+					<h3>{{item}}</h3>
+				</div>
+				<div class="col-auto m-4 text-danger">
+					<i data-feather="heart"></i>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{# Search (with category) #}
+{% set title = "Search Results" %}
+{% extends "templates/base.njk" %}
+
+{% block content %}
+<div class="row border border-dark rounded">
+	<div class="col border-end border-dark">
+		<h2 class="text-center">Snacks</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Snack</th>
+					<th scope="col">Price</th>
+					<th scope="col">Quantity (in stock)</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in snacks %}
+				<tr>
+					<td>{{item.name}}</td>
+					<td>{{item.price}}</td>
+					<td>{{item.quantity}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="col border-bottom">
+		<h2 class="text-center">Vending Machines</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Location</th>
+					<th scope="col">Has Favorite in Stock?</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in vending %}
+				<tr>
+					<td>{{item.name}}</td>
+					<td>{% if item.favoriteInStock %}Yes{% else %}No{% endif %}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

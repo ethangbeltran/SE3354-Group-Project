@@ -1,0 +1,23 @@
+{% set title = "Favorites" %}
+{% extends "templates/base.njk" %}
+
+{% block content %}
+<div class="container">
+	{% for item in snacks %}
+	<div class="row d-flex border border-dark rounded align-items-center mb-2">
+		<div class="col-1 border-end border-dark">
+			<img src="{{item.icon}}" class="w-100 p-2">
+		</div>
+		<div class="col py-2">
+			<h2>{{item.name}}</h2>
+			<p>{{item.price}}</p>
+		</div>
+		<div class="col-auto m-4 text-danger">
+			<i data-feather="heart"></i>
+		</div>
+	</div>
+	{% else %}
+	<p>No favorite snacks yet.</p>
+	{% endfor %}
+</div>
+{% endblock %}

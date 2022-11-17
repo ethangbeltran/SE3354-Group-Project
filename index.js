@@ -1,31 +1,34 @@
-const express = require('express')
-const mysql = require('mysql');
-const app = express()
-const port = 3000
+// Run dotenv module, this is placed first before any dependencies so there's no chance of a .env variable not showing up when it's supposed to
+require("dotenv").config();
 
-app.get('/api/stuff', (req, res) => {
-	console.log("User used endpoint /api/stuff")
+const express = require("express");
+const session = require("express-session");
+const routerGeneral = require("./routes/general");
+const routerAuth = require("./routes/auth");
+const routerAPI = require("./routes/api");
 
-	res.send(JSON.stringify({
-		type: 420,
-		message: "This is some sample text"
-	}))
-})
+const app = express();
+const port = parseInt(process.env.PORT) || 3000;
 
-// Maybe move configuration to separate file?
-const con = mysql.createConnection({
-	host: "localhost",
-	user: "username",
-	password: "passwd",
-});
+// express-session middleware must be placed before routers in order to activate, otherwise req.session will be undefined instead of {}
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      secure: "auto",
+    },
+  })
+);
 
-con.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-});
+// Use routes provided by routers
+app.use(routerGeneral);
+app.use(routerAuth);
+app.use(routerAPI);
 
-app.use(express.static('public'))
+app.use(express.static("public"));
 
 app.listen(port, () => {
-	console.log(`Example app listening on port ${port}`)
-})
+  console.log(`FastSnacks server listening on port ${port}.`);
+});
