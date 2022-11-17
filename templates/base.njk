@@ -27,19 +27,26 @@
 					<a href="/" class="me-2 p-2 border border-dark rounded d-inline-block">
 						<i data-feather="shopping-cart"></i>
 					</a>
-					<a href="{{"/profile" if username else "/login"}}" class="me-2 p-2 border border-dark rounded d-inline-block"
+					{% if username %}
+					<a href="/profile" class="me-2 p-2 border border-dark rounded d-inline-block text-decoration-none"
 						data-bs-toggle="tooltip"
 						data-bs-placement="bottom"
 						data-bs-custom-class="custom-tooltip"
-						data-bs-title="{% if username %}@{{username}}{% else %}Not logged in{% endif %}">
+						data-bs-title="Go to your profile">
+						<i data-feather="user"></i>
+						<span>@{{username}}</span>
+					</a>
+					<a href="/logout" class="btn btn-outline-danger me-2">Logout</a>
+					{% else %}
+					<a href="/login" class="me-2 p-2 border border-dark rounded d-inline-block text-decoration-none"
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						data-bs-custom-class="custom-tooltip"
+						data-bs-title="Not logged in">
 						<i data-feather="user"></i>
 					</a>
-					<a href="{{"/profile" if username else "/login"}}" class="btn btn-outline-secondary me-2"
-						data-bs-toggle="tooltip"
-						data-bs-placement="bottom"
-						data-bs-custom-class="custom-tooltip"
-						data-bs-title="Click here to {{"go to your profile" if username else "login"}}"
-					>{% if username %}@{{username}}{% else %}Not logged in{% endif %}</a>
+					<a href="/login" class="btn btn-outline-primary me-2">Login</a>
+					{% endif %}
 				</div>
 			</header>
 			{# Menu of links to other pages that appears when not on main page #}

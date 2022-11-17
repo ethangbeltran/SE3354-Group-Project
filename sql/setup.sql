@@ -35,7 +35,7 @@ CREATE TABLE PaymentMethods (
     Table to hold support tickets, and
 */
 CREATE TABLE SupportTickets (
-    SupportID INT NOT NULL,
+    SupportID INT NOT NULL AUTO_INCREMENT,
     Username VARCHAR(30) NOT NULL,
     Title VARCHAR(255) NOT NULL,
     Info VARCHAR(10000) NOT NULL,

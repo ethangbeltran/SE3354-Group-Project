@@ -4,7 +4,7 @@
   "description": "*insert description here*",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon .",
+    "start": "nodemon -e html,njk,js,css,json .",
     "format": "prettier --write ."
   },
   "repository": {
