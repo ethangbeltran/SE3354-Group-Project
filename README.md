@@ -11,22 +11,21 @@ _insert description here_
 - `.env`: Contains project variables
   - `PORT` (default `3000`)
   - `SESSION_SECRET`: Used to secure cookies, should be kept secret per-environment
-  - `MYSQL_HOST` (default `localhost`)
-  - `MYSQL_USER`
-  - `MYSQL_PASS`
+  - `DATABASE` (default `main.db`): The SQLite database file to be used
 
 # Commands
 
 - `npm install`: Installs or reinstalls necessary dependencies
 - `npm start`: Starts the development server
 - `npm run format`: Runs the code formatter
+- `npm run package`: Builds executables, must also distribute the `templates/` and `public/` folders as well as a database that's already been setup.
 
 # Database Setup
 
-The program does not automatically setup a MySQL database or the corresponding tables, the SQL scripts provided in `sql` must be run manually.
+The program does not automatically setup a SQLite database, the SQL scripts provided in `sql` must be run manually. The program uses `main.db` unless otherwise specified in `.env`.
 
-- Setup: `mysql -u <...> -p < sql/setup.sql` (if this script is run again, it'll wipe the existing database and create it again)
-- For any other SQL script, it's assumed that the `fastsnacks` database is selected: `mysql -u <...> -p -D fastsnacks < sql/sample-data.sql`
+1. `sqlite3 main.db`
+2. `.read sql/setup.sql` (or any other SQL file)
 
 # Frontend/Backend Communication
 

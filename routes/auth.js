@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const nunjucks = require("nunjucks");
-const connection = require("../util/database");
+const { db } = require("../util");
 const router = express.Router();
 module.exports = router;
 
@@ -53,7 +53,6 @@ router.post("/login", async (req, res) => {
     return res.redirect("/");
   }
 
-  const db = await connection;
   const { username, password } = req.body;
 
   if (username === "") {
@@ -63,18 +62,17 @@ router.post("/login", async (req, res) => {
     return res.redirect("/login?error=2");
   }
 
-  const [results] = await db.execute(
-    "SELECT * FROM Customers WHERE Username = ?",
-    [username]
-  );
+  const results = db
+    .prepare("SELECT * FROM Customers WHERE Username = ?")
+    .get(username);
 
-  // Check if the username already exists in the database.
-  if (results.length === 0) {
+  // Check if the username exists in the database.
+  if (!results) {
     return res.redirect("/login?error=3");
   }
 
   // There should only be one user per username, meaning this operation should be safe.
-  const { Username, PasswordHash } = results[0];
+  const { Username, PasswordHash } = results;
 
   const isValidPassword = await bcrypt.compare(password, PasswordHash);
 
@@ -100,7 +98,6 @@ router.post("/register", async (req, res) => {
     return res.redirect("/");
   }
 
-  const db = await connection;
   const { username, password } = req.body;
 
   if (username === "") {
@@ -116,23 +113,23 @@ router.post("/register", async (req, res) => {
   const passwordHash = await bcrypt.hash(password, 10); // 10 salt rounds
 
   // Check if the username already exists in the database, then create if successful.
-  const [results] = await db.execute(
-    "SELECT * FROM Customers WHERE Username = ?",
-    [username]
-  );
+  const results = db
+    .prepare("SELECT * FROM Customers WHERE Username = ?")
+    .get(username);
 
-  // If there are any results, send back an error
-  if (results.length !== 0) {
+  // If there are any existing results, send back an error
+  if (results) {
     return res.redirect("/register?error=4");
   }
 
   // Simply insert a new row
-  await db.execute("INSERT INTO Customers VALUES (?, ?, ?, ?)", [
+  db.prepare("INSERT INTO Customers VALUES (?, ?, ?, ?)").run(
     username,
     passwordHash,
-    false,
     0,
-  ]);
+    0
+  );
+
   res.redirect("/login?registration_success=1");
 });
 

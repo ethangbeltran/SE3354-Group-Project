@@ -1,6 +1,6 @@
 const express = require("express");
 const nunjucks = require("nunjucks");
-const connection = require("../util/database");
+const { db } = require("../util");
 const router = express.Router();
 module.exports = router;
 
@@ -9,7 +9,6 @@ router.use(express.urlencoded({ extended: true }));
 
 router.get("/", (req, res) => {
   const username = req.session.username;
-
   res.send(nunjucks.render("templates/index.njk", { username }));
 });
 
@@ -21,11 +20,12 @@ router.get("/favorites", async (req, res) => {
     return res.redirect("/login");
   }
 
-  const db = await connection;
-  let [results] = await db.execute(
-    "SELECT ItemName, Price FROM Favorites INNER JOIN Items ON Favorites.ItemID = Items.ItemID WHERE Username = ?",
-    [username]
-  );
+  let results = db
+    .prepare(
+      "SELECT ItemName, Price FROM Favorites INNER JOIN Items ON Favorites.ItemID = Items.ItemID WHERE Username = ?"
+    )
+    .all(username);
+
   results = results.map(({ ItemName, Price }) => ({
     icon: "fastsnacks.png",
     name: ItemName,
@@ -42,16 +42,15 @@ router.get("/favorites", async (req, res) => {
 
 router.get("/list-items", async (req, res) => {
   const username = req.session.username;
-  const db = await connection;
 
-  let [snacks] = await db.query("SELECT * FROM Items");
+  let snacks = db.prepare("SELECT * FROM Items").all();
   snacks = snacks.map(({ ItemName, Price }) => ({
     icon: "fastsnacks.png",
     name: ItemName,
     price: "$" + Price,
   }));
 
-  let [vending] = await db.query("SELECT * FROM VendingMachines");
+  let vending = db.prepare("SELECT * FROM VendingMachines").all();
   vending = vending.map(
     ({ MachineID, VendingLocation }) => `#${MachineID}: ${VendingLocation}`
   );
@@ -147,13 +146,11 @@ router.post("/support", async (req, res) => {
     return res.redirect("/login");
   }
 
-  const db = await connection;
   const { title, message } = req.body;
 
-  await db.execute(
-    "INSERT INTO SupportTickets (Username, Title, Info, Made, Resolved) VALUES (?, ?, ?, NOW(), false)",
-    [username, title, message]
-  );
+  db.prepare(
+    "INSERT INTO SupportTickets (Username, Title, Info, Made, Resolved) VALUES (?, ?, ?, DATE('now'), false)"
+  ).run(username, title, message);
 
   res.redirect("/support-submit?success=1");
 });
