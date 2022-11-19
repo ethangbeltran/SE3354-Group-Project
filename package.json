@@ -4,9 +4,9 @@
   "description": "*insert description here*",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -e html,njk,js,css,json .",
-    "format": "prettier --write .",
-    "package": "pkg --out-path tmp -c package.json index.js"
+    "start": "node .",
+    "watch": "nodemon -e html,njk,js,css,json .",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
-    "pkg": "^5.8.0",
     "prettier": "^2.7.1"
   }
 }
