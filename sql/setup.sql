@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS PaymentMethods (
     ExpirationYear INT NOT NULL,
 	AccountBalance DECIMAL(5,2) NOT NULL,
     Primary Key(Username, CardNumber),
-    Foreign Key(Username) REFERENCES Customers(Username)
+    Foreign Key(Username) REFERENCES Customers(Username) ON DELETE Cascade
 );
 
 /*
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS SupportTickets (
     Info VARCHAR(10000) NOT NULL,
     Made DATE NOT NULL,
     Resolved BOOLEAN NOT NULL,
-    Foreign Key(Username) REFERENCES Customers(Username)
+    Foreign Key(Username) REFERENCES Customers(Username) ON DELETE Cascade
 );
 /*
     Items can have the same name but will be differieniated by their ID
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS Orders (
 	ItemID INT NOT NULL,
 	Quantity INT NOT NULL,
 	OrderDate DATE NOT NULL,
-	Foreign Key(Username) REFERENCES Customers(Username),
+	Foreign Key(Username) REFERENCES Customers(Username) ON DELETE Cascade, 
 	Foreign Key(MachineID) REFERENCES VendingMachines(MachineID),
 	Foreign Key(ItemID) REFERENCES Items(ItemID)
 );
@@ -93,6 +93,6 @@ CREATE TABLE IF NOT EXISTS Favorites (
 	Username VARCHAR(30) NOT NULL,
 	ItemID INT NOT NULL,
 	Primary Key(Username, ItemID),
-	Foreign Key(Username) REFERENCES Customers(Username),
+	Foreign Key(Username) REFERENCES Customers(Username) ON DELETE Cascade,
 	Foreign Key(ItemID) REFERENCES Items(ItemID)
 );
