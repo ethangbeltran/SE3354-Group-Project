@@ -146,6 +146,12 @@ router.post("/user-delete", (req, res) => {
     return res.redirect("/");
   }
 
+  // Delete all data associated with the user first
+  db.prepare("DELETE FROM PaymentMethods WHERE Username = ?").run(username);
+  db.prepare("DELETE FROM SupportTickets WHERE Username = ?").run(username);
+  db.prepare("DELETE FROM Orders WHERE Username = ?").run(username);
+  db.prepare("DELETE FROM Favorites WHERE Username = ?").run(username);
+
   // Delete the user from the database
   db.prepare("DELETE FROM Customers WHERE Username = ?").run(username);
 
