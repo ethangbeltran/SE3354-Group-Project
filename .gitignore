@@ -1,4 +1,6 @@
 tmp/
+*.db
+!main.db
 
 # Logs
 logs

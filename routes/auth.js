@@ -137,3 +137,19 @@ router.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
+
+router.post("/user-delete", (req, res) => {
+  const username = req.session.username;
+
+  // Redirect the user to the main page if they're not logged in.
+  if (!username) {
+    return res.redirect("/");
+  }
+
+  // Delete the user from the database
+  db.prepare("DELETE FROM Customers WHERE Username = ?").run(username);
+
+  // Finally, logout and redirect
+  req.session.destroy();
+  res.redirect("/");
+});

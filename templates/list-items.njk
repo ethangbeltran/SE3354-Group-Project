@@ -14,11 +14,19 @@
 				</div>
 				<div class="col py-2">
 					<h3>{{item.name}}</h3>
-					<p>{{item.price}}</p>
+					<p>{{item.price}} | Calories: {{item.calories}} | Carbs: {{item.carb}} | Fat: {{item.fat}} | Protein: {{item.protein}} | Sugar: {{item.sugar}}</p>
 				</div>
-				<div class="col-auto m-4 text-danger">
-					<i data-feather="heart"></i>
-				</div>
+				<form action="/favorites-add" method="post" class="w-25">
+					<input type="hidden" id="asdf" name="itemID" value="{{item.id}}">
+					<button class="btn btn-outline-secondary col-auto m-4 text-danger"
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						data-bs-custom-class="custom-tooltip"
+						data-bs-title="Favorite"
+					>
+						<i data-feather="heart"></i>
+					</button>
+				</form>
 			</div>
 			{% endfor %}
 		</div>
@@ -30,9 +38,6 @@
 			<div class="row d-flex border border-dark rounded align-items-center mb-2">
 				<div class="col py-2">
 					<h3>{{item}}</h3>
-				</div>
-				<div class="col-auto m-4 text-danger">
-					<i data-feather="heart"></i>
 				</div>
 			</div>
 			{% endfor %}

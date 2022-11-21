@@ -4,9 +4,9 @@
   "description": "*insert description here*",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -e html,njk,js,css,json .",
-    "format": "prettier --write .",
-    "package": "pkg --out-path tmp -c package.json index.js"
+    "start": "node .",
+    "watch": "nodemon -e html,njk,js,css,json .",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "better-sqlite3": "^7.6.2",
+    "better-sqlite3-session-store": "^0.1.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
@@ -22,7 +23,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
-    "pkg": "^5.8.0",
     "prettier": "^2.7.1"
   }
 }

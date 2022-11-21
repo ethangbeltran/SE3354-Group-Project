@@ -12,6 +12,11 @@ router.get("/", (req, res) => {
   res.send(nunjucks.render("templates/index.njk", { username }));
 });
 
+router.get("/cart", (req, res) => {
+  const username = req.session.username;
+  res.send(nunjucks.render("templates/cart.njk", { username }));
+});
+
 router.get("/favorites", async (req, res) => {
   const username = req.session.username;
 
@@ -22,11 +27,12 @@ router.get("/favorites", async (req, res) => {
 
   let results = db
     .prepare(
-      "SELECT ItemName, Price FROM Favorites INNER JOIN Items ON Favorites.ItemID = Items.ItemID WHERE Username = ?"
+      "SELECT Items.ItemID, ItemName, Price FROM Favorites INNER JOIN Items ON Favorites.ItemID = Items.ItemID WHERE Username = ?"
     )
     .all(username);
 
-  results = results.map(({ ItemName, Price }) => ({
+  results = results.map(({ ItemID, ItemName, Price }) => ({
+    id: ItemID,
     icon: "fastsnacks.png",
     name: ItemName,
     price: "$" + Price,
@@ -40,15 +46,49 @@ router.get("/favorites", async (req, res) => {
   );
 });
 
+router.post("/favorites-add", (req, res) => {
+  const username = req.session.username;
+
+  // Redirect the user to the login page if they aren't already logged in.
+  if (!username) {
+    return res.redirect("/login");
+  }
+
+  db.prepare("INSERT INTO Favorites VALUES (?, ?)").run(username, parseInt(req.body.itemID));
+
+  res.redirect("/list-items");
+});
+
+router.post("/favorites-remove", (req, res) => {
+  const username = req.session.username;
+
+  // Redirect the user to the login page if they aren't already logged in.
+  if (!username) {
+    return res.redirect("/login");
+  }
+
+  db.prepare("DELETE FROM Favorites WHERE Username = ? AND ItemID = ?").run(username, parseInt(req.body.itemID));
+
+  res.redirect("/favorites");
+});
+
 router.get("/list-items", async (req, res) => {
   const username = req.session.username;
 
   let snacks = db.prepare("SELECT * FROM Items").all();
-  snacks = snacks.map(({ ItemName, Price }) => ({
-    icon: "fastsnacks.png",
-    name: ItemName,
-    price: "$" + Price,
-  }));
+  snacks = snacks.map(
+    ({ ItemID, ItemName, Price, Calories, Carb, Fat, Protein, Sugar }) => ({
+      id: ItemID,
+      icon: "fastsnacks.png",
+      name: ItemName,
+      price: `$${Price}`,
+      calories: Calories,
+      carb: Carb,
+      fat: Fat,
+      protein: Protein,
+      sugar: Sugar,
+    })
+  );
 
   let vending = db.prepare("SELECT * FROM VendingMachines").all();
   vending = vending.map(
@@ -74,6 +114,22 @@ router.get("/payment-methods", (req, res) => {
   );
 });
 
+router.get("/profile", (req, res) => {
+  const username = req.session.username;
+
+  const { RewardPoints } = db
+    .prepare("SELECT RewardPoints FROM Customers WHERE Username = ?")
+    .get(username);
+
+  res.send(
+    nunjucks.render("templates/profile.njk", {
+      username,
+      searches: req.session.searches || [],
+      rewardPoints: RewardPoints || 0,
+    })
+  );
+});
+
 router.get("/rewards", (req, res) => {
   const username = req.session.username;
 
@@ -83,41 +139,60 @@ router.get("/rewards", (req, res) => {
 
 router.get("/search", (req, res) => {
   const username = req.session.username;
+  const { query } = req.query;
+  const hasQuery = !!query;
+
+  let snacks = [];
+  let vending = [];
+
+  if (hasQuery) {
+    // Store the user's search, as per functional requirements
+    if(req.session.searches === undefined) {
+      req.session.searches = [];
+    }
+
+    req.session.searches.push(query);
+
+    // Search if string contains
+    snacks = db
+      .prepare(
+        "SELECT ItemName, Price, Calories, Carb, Fat, Protein, Sugar FROM Items WHERE ItemName LIKE ?"
+      )
+      .all(`%${query}%`);
+
+    snacks = snacks.map(
+      ({ ItemName, Price, Calories, Carb, Fat, Protein, Sugar }) => ({
+        name: ItemName,
+        price: `$${Price}`,
+        calories: Calories,
+        carb: Carb,
+        fat: Fat,
+        protein: Protein,
+        sugar: Sugar,
+      })
+    );
+
+    vending = db.prepare(`
+SELECT ItemName, Quantity, VendingMachines.MachineID, VendingLocation
+FROM VendingMachines
+INNER JOIN Stock ON VendingMachines.MachineID = Stock.MachineID
+INNER JOIN Items ON Stock.ItemID = Items.ItemID
+WHERE ItemName LIKE ?`).all(`%${query}%`);
+
+    vending = vending.map(({ ItemName, Quantity, MachineID, VendingLocation }) => ({
+      machine: `#${MachineID}: ${VendingLocation}`,
+      snack: ItemName,
+      quantity: Quantity
+    }));
+  }
 
   res.send(
     nunjucks.render("templates/search.njk", {
       username,
-      snacks: [
-        {
-          name: "Example Snack",
-          price: "$2.99",
-          quantity: 5,
-        },
-        {
-          name: "Potato Chips",
-          price: "$3.49",
-          quantity: 6,
-        },
-        {
-          name: "Diet Coke",
-          price: "$3.99",
-          quantity: 8,
-        },
-      ],
-      vending: [
-        {
-          name: "Richardson #7",
-          favoriteInStock: true,
-        },
-        {
-          name: "Plano #2",
-          favoriteInStock: false,
-        },
-        {
-          name: "Richardson #9",
-          favoriteInStock: false,
-        },
-      ],
+      query,
+      hasQuery,
+      snacks,
+      vending,
     })
   );
 });

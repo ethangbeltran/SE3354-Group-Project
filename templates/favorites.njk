@@ -12,9 +12,17 @@
 			<h2>{{item.name}}</h2>
 			<p>{{item.price}}</p>
 		</div>
-		<div class="col-auto m-4 text-danger">
-			<i data-feather="heart"></i>
-		</div>
+		<form action="/favorites-remove" method="post" class="w-25">
+			<input type="hidden" id="asdf" name="itemID" value="{{item.id}}">
+			<button class="btn btn-outline-secondary col-auto m-4 text-danger"
+				data-bs-toggle="tooltip"
+				data-bs-placement="bottom"
+				data-bs-custom-class="custom-tooltip"
+				data-bs-title="Unfavorite"
+			>
+				<i data-feather="trash-2"></i>
+			</button>
+		</form>
 	</div>
 	{% else %}
 	<p>No favorite snacks yet.</p>

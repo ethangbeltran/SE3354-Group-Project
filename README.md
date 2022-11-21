@@ -2,6 +2,13 @@
 
 _insert description here_
 
+# Commands
+
+- `npm install`: Installs or reinstalls necessary dependencies
+- `npm start`: Starts the development server
+- `npm run format`: Runs the code formatter
+- `npm run package`: Builds executables, must also distribute the `templates/` and `public/` folders as well as a database that's already been setup.
+
 # Project Structure
 
 - `public`: Static files served by the website, should use JavaScript for dynamic parts
@@ -12,13 +19,6 @@ _insert description here_
   - `PORT` (default `3000`)
   - `SESSION_SECRET`: Used to secure cookies, should be kept secret per-environment
   - `DATABASE` (default `main.db`): The SQLite database file to be used
-
-# Commands
-
-- `npm install`: Installs or reinstalls necessary dependencies
-- `npm start`: Starts the development server
-- `npm run format`: Runs the code formatter
-- `npm run package`: Builds executables, must also distribute the `templates/` and `public/` folders as well as a database that's already been setup.
 
 # Database Setup
 

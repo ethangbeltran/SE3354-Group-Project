@@ -3,6 +3,8 @@ require("dotenv").config();
 
 const express = require("express");
 const session = require("express-session");
+const Database = require("better-sqlite3");
+const SqliteStore = require("better-sqlite3-session-store")(session); // maintain logins even if the server restarts
 const routerGeneral = require("./routes/general");
 const routerAuth = require("./routes/auth");
 const routerAPI = require("./routes/api");
@@ -13,6 +15,13 @@ const port = parseInt(process.env.PORT) || 3000;
 // express-session middleware must be placed before routers in order to activate, otherwise req.session will be undefined instead of {}
 app.use(
   session({
+    store: new SqliteStore({
+      client: new Database("sessions.db"),
+      expired: {
+        clear: true,
+        intervalMs: 15 * 60 * 1000, // 15 mins
+      },
+    }),
     secret: process.env.SESSION_SECRET || "secret",
     resave: true,
     saveUninitialized: true,

@@ -24,7 +24,7 @@
 				<div class="col-2"></div>
 				<h1 class="col-6 text-center">FastSnacks</h1>
 				<div class="col-3 d-flex justify-content-end">
-					<a href="/" class="me-2 p-2 border border-dark rounded d-inline-block">
+					<a href="/cart" class="me-2 p-2 border border-dark rounded d-inline-block">
 						<i data-feather="shopping-cart"></i>
 					</a>
 					{% if username %}
@@ -53,35 +53,38 @@
 			<nav class="d-flex p-1 border-bottom border-dark">
 				<ul class="nav nav-pills">
 					<li class="nav-item">
-						<a href="/" class="nav-link border border-primary">Page</a>
+						<a href="/" class="nav-link border border-primary{{ " active" if title === "Home" }}">Home</a>
 					</li>
 					<li class="nav-item">
-						<a href="/" class="nav-link border border-primary ms-1">Page</a>
+						<a href="/list-items" class="nav-link border border-primary ms-1{{ " active" if title === "List of Items" }}">List</a>
 					</li>
 					<li class="nav-item">
-						<a href="/" class="nav-link border border-primary ms-1">Page</a>
+						<a href="/rewards" class="nav-link border border-primary ms-1{{ " active" if title === "Rewards" }}">Rewards</a>
 					</li>
 					<li class="nav-item">
-						<a href="/" class="nav-link border border-primary ms-1 active">Page</a>
+						<a href="/favorites" class="nav-link border border-primary ms-1{{ " active" if title === "Favorites" }}">Favorites</a>
 					</li>
 					<li class="nav-item">
-						<a href="/" class="nav-link border border-primary ms-1">Page</a>
+						<a href="/payment-methods" class="nav-link border border-primary ms-1{{ " active" if title === "Payment Methods" }}">Payment Methods</a>
+					</li>
+					<li class="nav-item">
+						<a href="/transaction-history" class="nav-link border border-primary ms-1{{ " active" if title === "Transaction History" }}">Transaction History</a>
+					</li>
+					<li class="nav-item">
+						<a href="/support-submit" class="nav-link border border-primary ms-1{{ " active" if title === "Submit a Support Ticket" }}">Support</a>
 					</li>
 				</ul>
-				<select class="form-select w-auto ms-1">
-					<option selected>Choose a category</option>
-					<option value="1">Vending Machines</option>
-					<option value="2">Items</option>
-				</select>
-				<div class="input-group w-auto flex-grow-1 align-self-center mx-1">
-					<div class="input-group-prepend">
-						<span class="input-group-text">Query</span>
+				<form action="/search" method="get">
+					<div class="input-group w-auto flex-grow-1 align-self-center mx-1">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Query</span>
+						</div>
+						<input type="text" name="query" class="form-control">
+						<div class="input-group-prepend">
+							<button class="input-group-text"><i data-feather="search"></i></button>
+						</div>
 					</div>
-					<input type="text" class="form-control">
-					<div class="input-group-prepend">
-						<button class="input-group-text"><i data-feather="search"></i></button>
-					</div>
-				</div>
+				</form>
 			</nav>
 			<article class="py-4 px-5">
 				<h1 class="text-center">{{title}}</h1>
