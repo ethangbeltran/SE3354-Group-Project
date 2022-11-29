@@ -9,6 +9,16 @@
         <form action="/action_page.php">
         {# This allows the user to enter their personal information for billing #}
           <div class="row">
+            {% for method in methods %}
+            <div class="row d-flex border border-dark rounded align-items-center mb-2">
+              <h3>Payment method {{forloop.index}}</h3>
+              <p>Card number: {{method.ccnum}}, Expiration Date: {{method.expmonth}}/{{method.expyear}}</p>
+            </div>
+            {% else %}
+            <div class="row d-flex border border-dark rounded align-items-center mb-2">
+              <p align="center">It seems that you have no payment methods saved. Why not go ahead and add one?</p>
+            </div>
+            {% endfor %}
             <div class="col-6">
               <h3>Billing Address</h3>
               <label for="fname"><i class="fa fa-user"></i> Full Name</label>

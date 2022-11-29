@@ -110,9 +110,20 @@ router.get("/payment-methods", (req, res) => {
   if (!username) {
       return res.redirect("/login?error=5")
   }
+
+  let methods = db.prepare("SELECT * FROM PaymentMethods WHERE Username = ?").all(username);
+  methods = methods.map(
+      ({ CardNumber, ExpirationMonth, ExpirationYear }) => ({
+        ccnum: "xxxxxxxxxxxx" + CardNumber.substring(CardNumber.length - 4),
+        expmonth: ExpirationMonth,
+        expyear: ExpirationYear,
+      })
+  );
+
   res.send(
     nunjucks.render("templates/payment-methods.njk", {
       username,
+      methods,
     })
   );
 });
