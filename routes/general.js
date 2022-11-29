@@ -22,7 +22,7 @@ router.get("/favorites", async (req, res) => {
 
   // Redirect the user to the login page if they aren't already logged in.
   if (!username) {
-    return res.redirect("/login");
+    return res.redirect("/login?error=5");
   }
 
   let results = db
@@ -51,7 +51,7 @@ router.post("/favorites-add", (req, res) => {
 
   // Redirect the user to the login page if they aren't already logged in.
   if (!username) {
-    return res.redirect("/login");
+    return res.redirect("/login?error=5");
   }
 
   db.prepare("INSERT INTO Favorites VALUES (?, ?)").run(username, parseInt(req.body.itemID));
@@ -64,7 +64,7 @@ router.post("/favorites-remove", (req, res) => {
 
   // Redirect the user to the login page if they aren't already logged in.
   if (!username) {
-    return res.redirect("/login");
+    return res.redirect("/login?error=5");
   }
 
   db.prepare("DELETE FROM Favorites WHERE Username = ? AND ItemID = ?").run(username, parseInt(req.body.itemID));
@@ -107,6 +107,9 @@ router.get("/list-items", async (req, res) => {
 router.get("/payment-methods", (req, res) => {
   const username = req.session.username;
 
+  if (!username) {
+      return res.redirect("/login?error=5")
+  }
   res.send(
     nunjucks.render("templates/payment-methods.njk", {
       username,
@@ -132,6 +135,10 @@ router.get("/profile", (req, res) => {
 
 router.get("/rewards", (req, res) => {
   const username = req.session.username;
+
+  if (!username) {
+      return res.redirect("/login?error=5")
+  }
 
   // TODO: Create a paginate function to split an array into 4 sections each
   res.send(nunjucks.render("templates/rewards.njk", { username }));
@@ -202,7 +209,7 @@ router.get("/support-submit", (req, res) => {
 
   // Redirect the user to the login page if they aren't already logged in.
   if (!username) {
-    return res.redirect("/login");
+    return res.redirect("/login?error=5");
   }
 
   res.send(
@@ -218,7 +225,7 @@ router.post("/support", async (req, res) => {
 
   // Redirect the user to the login page if they aren't already logged in.
   if (!username) {
-    return res.redirect("/login");
+    return res.redirect("/login?error=5");
   }
 
   const { title, message } = req.body;
@@ -235,7 +242,7 @@ router.get("/transaction-history", (req, res) => {
 
   // Redirect the user to the login page if they aren't already logged in.
   if (!username) {
-    return res.redirect("/login");
+    return res.redirect("/login?error=5");
   }
 
   res.send(

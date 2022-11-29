@@ -11,6 +11,7 @@
 	{% if error === "2" %}<div class="alert alert-danger">Your password cannot be empty!</div>{% endif %}
 	{% if error === "3" %}<div class="alert alert-danger">The provided username doesn't exist!</div>{% endif %}
 	{% if error === "4" %}<div class="alert alert-danger">The password you provided is invalid!</div>{% endif %}
+	{% if error === "5" %}<div class="alert alert-danger">You must be logged in to do that.</div>{% endif %}
 	{% if isRegistrationSuccessful %}<div class="alert alert-success">Successfully registered an account! Now just login with your new credentials.</div>{% endif %}
 	<form action="/login" method="post" class="needs-validation" novalidate>
 		<div class="input-group mb-2">
