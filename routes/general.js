@@ -256,21 +256,24 @@ router.get("/transaction-history", (req, res) => {
     return res.redirect("/login?error=5");
   }
 
+  let results = db.prepare(
+    "SELECT Username, Quantity, OrderDate, Items.ItemID, Items.ItemName, Items.Price FROM Orders \
+    INNER JOIN Items on Orders.ItemID = Items.ItemID \
+    WHERE Username = ?"
+  ).all(username);
+
+  results = results.map(
+      ({OrderDate, Quantity, ItemName, Price}) => ({
+        date: OrderDate,
+        name: ItemName,
+        quantity: Quantity,
+        price: Price,
+      })
+  );
   res.send(
     nunjucks.render("templates/transaction-history.njk", {
       username,
-      list: [
-        {
-          date: "10/30/2022",
-          name: "Lay's Chips",
-          price: "$0.99",
-        },
-        {
-          date: "11/02/2022",
-          name: "Diet Coca-Cola",
-          price: "$3.50",
-        },
-      ],
+      list: results,
     })
   );
 });

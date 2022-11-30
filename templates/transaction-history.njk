@@ -28,7 +28,8 @@
             <tr>
               <th>Date</th>
               <th>Description</th>
-              <th>Amount</th>
+              <th>Quantity</th>
+              <th>Price</th>
             </tr>
           </thead>
           {# This shows all the recent purchases made by the user #}
@@ -37,7 +38,8 @@
             <tr class="transaction-row">
               <td class="transaction-date">{{item.date}}</td>
               <td>{{item.name}}</td>
-              <td class="transaction-amount">{{item.price}}</td>
+              <td>{{item.quantity}}</td>
+              <td class="transaction-amount">${{item.price}}</td>
             </tr>
             {% endfor %}
           </tbody>
