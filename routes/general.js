@@ -12,9 +12,31 @@ router.get("/", (req, res) => {
   res.send(nunjucks.render("templates/index.njk", { username }));
 });
 
+router.post("/add-to-cart", (req, res) => {
+  if (req.session.cart === undefined)
+    req.session.cart = [];
+
+  req.session.cart.push(req.body.itemID);
+  res.redirect("/cart");
+});
+
 router.get("/cart", (req, res) => {
   const username = req.session.username;
-  res.send(nunjucks.render("templates/cart.njk", { username }));
+  var results;
+  if (req.session.cart === undefined)
+    req.session.cart = [];
+  else {
+    results = db.prepare("SELECT * FROM Items WHERE ItemID IN (?)").all(req.session.cart.toString());
+    results = results.map(({ ItemName, Price }) => ({
+      name: ItemName,
+      price: "$" + Price,
+    }));
+  }
+
+  res.send(nunjucks.render("templates/cart.njk", {
+    username,
+    cart: results
+  }));
 });
 
 router.get("/favorites", async (req, res) => {

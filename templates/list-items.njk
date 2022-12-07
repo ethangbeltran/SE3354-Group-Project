@@ -27,6 +27,17 @@
 						<i data-feather="heart"></i>
 					</button>
 				</form>
+				<form action="/add-to-cart" method="post" class="w-25">
+					<input type="hidden" id="asdf" name="itemID" value="{{item.id}}">
+					<button class="btn btn-outline-secondary col-auto m-4 text-danger"
+						data-bs-toggle="tooltip"
+						data-bs-placement="bottom"
+						data-bs-custom-class="custom-tooltip"
+						data-bs-title="Add to cart"
+					>
+						<i data-feather="shopping-cart"></i>
+					</button>
+				</form>
 			</div>
 			{% endfor %}
 		</div>
