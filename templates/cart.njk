@@ -11,9 +11,11 @@
             <p>{{item.price}}</p>
         </div>
     </div>
-    <a href="#" class="btn btn-outline-primary btn-align-center me-2">Checkout</a>
     {% else %}
     <p>You currently do not have anything in your cart.</p>
     {% endfor %}
+    {%- if cart.length > 0 -%}
+    <a href="#" class="btn btn-outline-primary btn-align-center me-2">Checkout</a>
+    {%- endif -%}
 </div>
 {% endblock %}

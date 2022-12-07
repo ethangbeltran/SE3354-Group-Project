@@ -26,7 +26,8 @@ router.get("/cart", (req, res) => {
   if (req.session.cart === undefined)
     req.session.cart = [];
   else {
-    results = db.prepare("SELECT * FROM Items WHERE ItemID IN (?)").all(req.session.cart.toString());
+    const temp = req.session.cart.toString();
+    results = db.prepare("SELECT * FROM Items WHERE ItemID IN (" + temp + ")").all();
     results = results.map(({ ItemName, Price }) => ({
       name: ItemName,
       price: "$" + Price,
